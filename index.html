@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chat</title>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+      <!-- jQuery library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+      <!-- Latest compiled JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <link rel="shortcut icon" href="presentation2.ico">
+    <style>
+        *{
+            margin: 0; padding: 0; box-sizing: border-box;
+         }
+        body {
+            font: 13px Helvetica, Arial;
+        }
+
+        #container {
+        list-style-type: none; margin: 0; padding: 0;
+        width: 260px; position: absolute;
+        border: 1px solid #eee;/*#73AD21*/
+        bottom: -33px;
+        right:100px;
+        border-top-left-radius: 17px;
+        border-top-right-radius: 17px;
+        position: fixed;
+        bottom: 0px;
+        right: 120px;
+        }
+        #chat_title{
+            background-color:#7c4b8e ;
+            height: 30px;
+            position: relative;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        #chat_title p{
+            color: ghostwhite;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            transform: translate(-50%, -50%);
+        }
+        #chat_title:hover {
+            background-color: #9460BF;
+        }
+        #chat_ending {
+
+            background-color:#7c4b8e ;
+            height: 22px;
+            margin-top: 0px;
+            display: none;
+        }
+
+        #messages {
+            height:280px;overflow-y:scroll;
+        }
+        #messages li {
+            margin: 10px; padding: 10px; border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            display: table;
+            table-layout: fixed;
+            width: auto;
+            word-break: break-all;
+        }
+        #messages li:nth-child(odd) {
+            background: #D9EDF1 ; border-bottom-right-radius: 15px;
+            float:left;clear: both
+        }
+        #messages li:nth-child(even) {
+            background: #CDCDCD;border-bottom-left-radius: 15px;
+            float:right;clear: both
+        }
+        #m{
+            width: 82%;
+            height: 34px;
+        }
+        .btn-primary {
+            background-color: #7c4b8e ;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus,
+        .btn-primary:active    {
+            background-color: #9460BF;
+            color: white;
+            border:none;
+        }
+        .hidebtn
+        {
+            float: right;
+        }
+        .hidebtn:hover
+        {
+            background-color: #7c4b8e ;
+            float: right;
+            color:#ee4b63
+        }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+        <div id="chat_title">
+            <p> OS Class</p>
+            <button  type="submit" class="hidebtn btn btn-primary btn-sm">
+                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+            </button>
+        </div>
+        <ul id="messages"></ul>
+        <form action="">
+            <input id="m" class="w3-input w3-border w3-round" type="text" autocomplete="off" placeholder="  Type....">
+            <button type="submit" class="btn btn-primary btn-md">
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            </button>
+        </form>
+        <div id="chat_ending"></div>
+    </div>
+
+
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+    $(function () {
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        var element = document.getElementById("messages");
+        element.scrollTop = element.scrollHeight;
+        var list = document.getElementById("messages li");
+        $('#messages').append($('<li>').text(msg));
+        $('#messages').insertAfter((list.childNodes[0]));
+      });
+    });
+  </script>
+
+  </body>
+</html>
